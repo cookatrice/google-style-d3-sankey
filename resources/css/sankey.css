@@ -1,0 +1,24 @@
+/* Created by cookatrice on 2015. 9. 1.. */
+@import url(http://fonts.googleapis.com/css?family=PT+Serif|PT+Serif:b|PT+Serif:i|PT+Sans|PT+Sans:b);
+
+.node rect {
+    cursor: move;
+    fill-opacity: .9;
+    shape-rendering: crispEdges;
+}
+
+.node text {
+    pointer-events: none;
+    font: normal 12px Arial;
+    /*text-shadow: 0 1px 0 #fff;*/
+}
+
+.link {
+    fill: none;
+    stroke: #A9E2F3;
+    stroke-opacity: .4;
+}
+
+.link:hover {
+    stroke-opacity: .5 !important;
+}
