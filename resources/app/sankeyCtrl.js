@@ -95,7 +95,11 @@ controllers.controller('sankeyCtrl', function ($scope, $log, APP_VERSION) {
         if (receiveData && receiveData.length != 0) {
             $scope.receiveRawData = receiveData;
             $scope.sankeyStep = 1;
-            drawSankeyChart(extractCurDepthSankeyData(refineSankeyChartData($scope.receiveRawData), $scope.sankeyStep));
+            drawSankeyChart(
+                extractCurDepthSankeyData(
+                    refineSankeyChartData($scope.receiveRawData),
+                    $scope.sankeyStep)
+            );
         } else {
             $log.error('Have no data....!!!');
         }
@@ -221,6 +225,7 @@ controllers.controller('sankeyCtrl', function ($scope, $log, APP_VERSION) {
                 nodeIndex++;
             });
         });
+
         setMaxNodeLength(maxNodeLength);
 
         /** make links set */
@@ -249,8 +254,13 @@ controllers.controller('sankeyCtrl', function ($scope, $log, APP_VERSION) {
     }
 
     function drawSankeyChart(refineSankeyData) {
+
+        var NODE_WIDTH = 200;
+        var NODE_PADDING = 40;
+        var DEPTH_WIDTH = 350;
+
         var margin = {top: 70, right: 20, bottom: 20, left: 20};
-        var width = 550 + (($scope.sankeyStep - 1) * 350) + 150;
+        var width = 550 + (($scope.sankeyStep - 1) * DEPTH_WIDTH) + 150;
         var sankeyWidth = width - 150;  //for next/previous button
         var height = getMaxNodeLength() * 100 + margin.top;
 
@@ -304,8 +314,8 @@ controllers.controller('sankeyCtrl', function ($scope, $log, APP_VERSION) {
             .attr("stop-opacity", 1);
 
         var sankey = d3.sankey()
-            .nodeWidth(200)
-            .nodePadding(40)
+            .nodeWidth(NODE_WIDTH)
+            .nodePadding(NODE_PADDING)
             .size([sankeyWidth, height]);
 
         var path = sankey.link();
@@ -328,9 +338,9 @@ controllers.controller('sankeyCtrl', function ($scope, $log, APP_VERSION) {
                 .attr("class", "depthInfo");
             depthInfo.append("rect")
                 .attr("height", 50)
-                .attr("width", 200)
+                .attr("width", NODE_WIDTH)
                 .attr("x", function (d) {
-                    return d.depth * 350;
+                    return d.depth * DEPTH_WIDTH;
                 })
                 .attr("y", -80)
                 .style("fill", "#F5F6CE")
@@ -342,7 +352,7 @@ controllers.controller('sankeyCtrl', function ($scope, $log, APP_VERSION) {
                 .attr("y", -60)
                 .append('svg:tspan')
                 .attr("x", function (d) {
-                    return (d.depth * 350) + 5;//plus padding
+                    return (d.depth * DEPTH_WIDTH) + 5;//plus padding
                 })
                 .attr('dy', 5)
                 .attr("fill", "red")
@@ -351,7 +361,7 @@ controllers.controller('sankeyCtrl', function ($scope, $log, APP_VERSION) {
                 })
                 .append('svg:tspan')
                 .attr("x", function (d) {
-                    return (d.depth * 350) + 5;//plus padding
+                    return (d.depth * DEPTH_WIDTH) + 5;//plus padding
                 })
                 .attr('dy', 20)
                 .text(function (d) {
@@ -362,7 +372,6 @@ controllers.controller('sankeyCtrl', function ($scope, $log, APP_VERSION) {
                     return returnString;
                 })
                 .attr("fill", "black");
-
 
             sankey
                 .nodes(sankeyDataSet.nodes)
@@ -424,15 +433,7 @@ controllers.controller('sankeyCtrl', function ($scope, $log, APP_VERSION) {
                 .attr("transform", function (d) {
                     return "translate(" + d.x + "," + d.y + ")";
                 })
-                .on("click", highlight_node_links)
-                .call(d3.behavior.drag()
-                    .origin(function (d) {
-                        return d;
-                    })
-                    .on("dragstart", function () {
-                        this.parentNode.appendChild(this);
-                    })
-                    .on("drag", dragmove));
+                .on("click", highlight_node_links);
 
             /** d3-tip event bind on node */
             node.call(tip)
@@ -485,17 +486,6 @@ controllers.controller('sankeyCtrl', function ($scope, $log, APP_VERSION) {
                     }
                 })
                 .attr("fill", "black");
-
-            function dragmove(d) {
-                d3.select(this).attr("transform", "translate("
-                    + d.x
-                        //+ (d.x = Math.max(0, Math.min(width - d.dx, d3.event.x)))
-                    + ","
-                    + (d.y = Math.max(0, Math.min(height - d.dy, d3.event.y)))
-                    + ")");
-                sankey.relayout();
-                link.attr("d", path);
-            }
 
             function highlight_node_links(node, i) {
 

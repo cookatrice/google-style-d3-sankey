@@ -9,7 +9,7 @@ var App = angular.module('myApp', ['app.constants', 'app.controllers']);
  * Application constants
  */
 angular.module('app.constants', [])
-    .constant('APP_VERSION', '0.1');
+    .constant('APP_VERSION', '0.11');
 
 /**
  * App config run & block
