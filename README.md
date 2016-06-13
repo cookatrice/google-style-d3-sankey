@@ -1,5 +1,7 @@
 # google-style-d3-sankey
 
+[![Join the chat at https://gitter.im/cookatrice/google-style-d3-sankey](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cookatrice/google-style-d3-sankey?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ![sankeyChart](/resources/images/sankeySample.png)
 (<a href="https://youtu.be/QRn7hZeFOsA" target="_blank">example video click</a>)
 
